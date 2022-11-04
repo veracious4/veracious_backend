@@ -15,7 +15,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from veracious_app_api import urls as veracious_app_api_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    # TODO: Uncomment this code after adding URL's in backend_server\veracious_app_api\urls.py
+    # path('api/', veracious_app_api_urls),
 ]
