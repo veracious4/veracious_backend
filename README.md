@@ -2,49 +2,49 @@
 Backend repository for Veracious project
 
 
-
+## 1) Setting up project
 ### To create virtual environment
+```
+python -m venv <ENVIRONMENT_NAME>
+```
     
-    ```bash
-    python -m venv <ENVIRONMENT_NAME>
-    ```
-    for e.g.
-    ```bash
-    python -m venv backend_env
-    ```
+for e.g.
+```bash
+python -m venv backend_env
+```
 
 ### To activate virtual environment
 
-    ```bash
-    <ENVIRONMENT_NAME>\Scripts\activate
-    ``` 
+```bash
+<ENVIRONMENT_NAME>\Scripts\activate
+``` 
 
 ### To install dependencies
 
-    ```bash
-    pip install -r requirements.txt
-    ```
+```bash
+pip install -r requirements.txt
+```
 
 ### To create requirements.txt
 
-    ```bash
-    pip freeze > requirements.txt
-    ```
+```bash
+pip freeze > requirements.txt
+```
 
 ### To sync databases you can run
-    ```bash
-    cd backend_server
-    ```
+```bash
+cd backend_server
+```
     
-    ```bash
-    python manage.py migrate
-    ```
+```bash
+python manage.py migrate
+```
 
 ### To run the server
-    ```bash
-    cd backend_server
-    ```
+```bash
+cd backend_server
+```
 
-    ```bash
-    python manage.py runserver
-    ```
+```bash
+python manage.py runserver
+```
