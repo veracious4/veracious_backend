@@ -67,7 +67,9 @@ def fact_validator_lstm(fact, model, tokenizer, maxlen):
 
 # Utilities for SVM Algorithm
 def load_model_vectorizer_svm(model_path, vectorizer_path):
-    svm_model = load_model(model_path)
+    with open(model_path, "rb") as file:
+        svm_model = pickle.load(file)
+
     with open(vectorizer_path, "rb") as file:
         svm_vectorizer = pickle.load(file)
     return (svm_model, svm_vectorizer)
@@ -84,7 +86,9 @@ def fact_validator_svm(fact, model, vectorizer):
 
 # Utilities for Naive Bayes Algorithm
 def load_model_vectorizer_nb(model_path, vectorizer_path):
-    nb_model = load_model(model_path)
+    with open(model_path, "rb") as file:
+        nb_model = pickle.load(file)
+
     with open(vectorizer_path, "rb") as file:
         nb_vectorizer = pickle.load(file)
     return (nb_model, nb_vectorizer)
