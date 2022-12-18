@@ -46,11 +46,16 @@ def get_fact_validation(fact: str):
     (nb_model, nb_vectorizer) = load_model_vectorizer_svm("../saved_models/bernoulli_nb_classifier.pkl", "../saved_models/vectorizer_SVM_NB.pickle")
     pred_nb = fact_validator_nb(fact, nb_model, nb_vectorizer)
 
+    # # Bert Model
+    # bert_model = load_model_bert("../saved_models/bert/bert_classifier")
+    # pred_bert = fact_validator_bert(fact, bert_model)  
+
     # Ensembling Result
     pred_lstm = float(pred_lstm)
     pred_pac = float(pred_pac[0])
     #pred_svm = float(pred_svm)
     pred_nb = float(pred_nb)
+    # pred_bert = float(pred_bert)
 
     if(pred_pac == 1.0):
         pred_pac = 0.75
@@ -62,7 +67,7 @@ def get_fact_validation(fact: str):
     else:
         pred_svm = 0.25'''
 
-
     ensembled_result = (pred_lstm + pred_pac + pred_nb)/3
+    # ensembled_result = (pred_lstm + pred_pac + pred_nb + pred_bert)/4
 
     return {"trust_score": str(ensembled_result)}

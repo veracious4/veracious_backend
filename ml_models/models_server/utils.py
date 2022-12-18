@@ -4,6 +4,7 @@ from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize
 from keras.models import load_model
 from tensorflow.keras.preprocessing.sequence import pad_sequences
+import tensorflow as tf
 import re
 import pickle
 
@@ -102,3 +103,14 @@ def fact_validator_nb(fact, model, vectorizer):
     x = vectorizer.transform(x)
     x_pred = model.predict(x)
     return x_pred
+
+# Utilities for BERT
+def load_model_bert(model_path):
+    bert_model = tf.saved_model.load(model_path)
+    return(bert_model)
+
+def fact_validator_bert(fact, model):
+    fact_Ser = [fact]
+    fact_pred_tensor = tf.sigmoid(model(tf.constant(fact_Ser)))
+    pred = fact_pred_tensor[0][0].numpy()
+    return pred
