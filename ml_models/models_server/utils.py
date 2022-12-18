@@ -64,3 +64,37 @@ def fact_validator_lstm(fact, model, tokenizer, maxlen):
     pred = model.predict(padded_tokenized_fact)
 
     return pred[0][0]
+
+# Utilities for SVM Algorithm
+def load_model_vectorizer_svm(model_path, vectorizer_path):
+    svm_model = load_model(model_path)
+    with open(vectorizer_path, "rb") as file:
+        svm_vectorizer = pickle.load(file)
+    return (svm_model, svm_vectorizer)
+
+def fact_validator_svm(fact, model, vectorizer):
+    lfact = preprocesFactDescription(fact)
+
+    df = pd.DataFrame([lfact])
+
+    x = df.iloc[:,0]
+    x = vectorizer.transform(x)
+    x_pred = model.predict(x)
+    return x_pred=='1'
+
+# Utilities for Naive Bayes Algorithm
+def load_model_vectorizer_nb(model_path, vectorizer_path):
+    nb_model = load_model(model_path)
+    with open(vectorizer_path, "rb") as file:
+        nb_vectorizer = pickle.load(file)
+    return (nb_model, nb_vectorizer)
+
+def fact_validator_nb(fact, model, vectorizer):
+    lfact = preprocesFactDescription(fact)
+
+    df = pd.DataFrame([lfact])
+
+    x = df.iloc[:,0]
+    x = vectorizer.transform(x)
+    x_pred = model.predict(x)
+    return x_pred
