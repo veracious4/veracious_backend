@@ -37,8 +37,6 @@ class CleanRawData:
         medical_data_test = self.__filter_PUBHEALTH_medical_data(test_corpus)
         medical_data_train.to_csv(r"./data/PUBHEALTH/medical_data_cleaned_train.tsv", sep='\t', index=False)
         medical_data_test.to_csv(r"./data/PUBHEALTH/medical_data_cleaned_test.tsv", sep='\t', index=False)
-
-
-
+        
 data_cleaner = CleanRawData()
 # data_cleaner.clean_PUBHEALTH_dataset() 
