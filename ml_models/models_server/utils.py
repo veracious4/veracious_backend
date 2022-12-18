@@ -2,6 +2,8 @@ import pandas as pd
 from nltk.corpus import stopwords
 from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize
+from keras.models import load_model
+from tensorflow.keras.preprocessing.sequence import pad_sequences
 import re
 import pickle
 
@@ -20,10 +22,10 @@ def preprocesFactDescription(sentence):
             lemma_words.append(new_word)
     return " ".join(lemma_words)
 
-def fact_validator(news, model, vectorizer):
-    lnews = preprocesFactDescription(news)
+def fact_validator(fact, model, vectorizer):
+    lfact = preprocesFactDescription(fact)
 
-    df = pd.DataFrame([lnews])
+    df = pd.DataFrame([lfact])
 
     x = df.iloc[:,0]
     x = vectorizer.transform(x)
@@ -40,3 +42,25 @@ def load_model_vectorizer(model_path, vectorizer_path):
         pac_vectorizer = pickle.load(file)
 
     return (pac_model, pac_vectorizer)
+
+
+
+# Utilities for LSTM Algorithm
+def load_model_tokenizer_lstm(model_path, tokenizer_path):
+
+    lstm_model = load_model(model_path)
+
+    with open(tokenizer_path, "rb") as file:
+        lstm_tokenizer = pickle.load(file)
+
+    return (lstm_model, lstm_tokenizer)
+
+
+def fact_validator_lstm(fact, model, tokenizer, maxlen):
+
+    fact_Ser = [fact]
+    tokenized_fact = tokenizer.texts_to_sequences(fact_Ser)
+    padded_tokenized_fact = pad_sequences(tokenized_fact, maxlen=maxlen)
+    pred = model.predict(padded_tokenized_fact)
+
+    return pred[0][0]
