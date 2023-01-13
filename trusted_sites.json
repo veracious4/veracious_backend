@@ -1,0 +1,71 @@
+{
+    "Politics":[
+        "https://www.factcheck.org/"
+
+    ],
+    "Health":[
+        "https://www.who.int/"
+
+    ],
+    "Entertainment":[],
+    "Space":[
+        "https://www.nasa.gov/"
+
+    ],
+    "Science":[
+        "https://www.science.org/"
+
+    ],
+    "Technology":[
+        "https://www.techradar.com/news"
+
+    ],
+    "Geography":[],
+    "Literature":[],
+    "Economy":[],
+    "History":[
+        "https://www.smithsonianmag.com/",
+        "https://www.worldhistory.org/",
+        "https://www.archaeology.org/"
+
+    ],
+    "Mythology":[],
+    "Sports":[],
+    "Business":[
+        "https://economictimes.indiatimes.com/",
+        "https://www.bloomberg.com/",
+        "https://www.livemint.com/",
+        "https://www.moneycontrol.com/",
+        "https://www.business-standard.com/",
+        "https://www.businesstoday.in/",
+        "https://www.thehindubusinessline.com/",
+        "https://www.businessinsider.in/",
+        "https://www.financialexpress.com/",
+        "https://www.google.com/finance/",
+        "https://www.moneylife.in/",
+        "https://www.ibtimes.com/",
+        "https://www.marketwatch.com/",
+        "https://www.ft.com/"
+
+    ],
+    "General":[
+        "https://www.sciencedaily.com/",
+        "https://www.nytimes.com/",
+        "https://www.tmz.com/",
+        "https://www.bbc.com/",
+        "https://edition.cnn.com/",
+        "https://www.tribuneindia.com/",
+        "https://www.theguardian.com/international/",
+        "https://www.reuters.com/",
+        "https://news.abplive.com/",
+        "https://www.hindustantimes.com/",
+        "https://www.indiatoday.in/",
+        "https://aninews.in/",
+        "https://www.indiatvnews.com/",
+        "https://www.news18.com/",
+        "https://www.pib.gov.in/",
+        "https://indianexpress.com/",
+        "https://www.thehindu.com/",
+        "https://www.ndtv.com/"
+    ]
+}
