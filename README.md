@@ -1,8 +1,15 @@
 # veracious_backend
 Backend repository for Veracious project
 
+ ## 1) Installing dependencies
+### 1.1) Installing python 3.8
+### 1.2) Installing Selenium webdriver for Chrome: https://chromedriver.chromium.org/downloads
+### 1.3) Set up the os environment variable for the webdriver such as:
+```bash
+    SET SELENIUM_WEB_DRIVER_CHROME_PATH=<PATH_TO_CHROME_DRIVER>
+```
 
-## 1) Setting up project
+## 2) Setting up project
 ### To create virtual environment
 ```
 python -m venv <ENVIRONMENT_NAME>
