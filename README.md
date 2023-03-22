@@ -55,3 +55,12 @@ cd backend_server
 ```bash
 python manage.py runserver
 ```
+
+ ### To run fastapi server
+```bash
+cd ml_models/models_server
+```
+
+```bash
+uvicorn main:app --reload
+```
