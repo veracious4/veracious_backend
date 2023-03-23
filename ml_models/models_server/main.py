@@ -4,6 +4,10 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 import numpy as np
+import pymongo
+import uuid
+import pika
+import threading
 
 from utils import *
 
@@ -19,6 +23,21 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+# Connecting to MongoDB
+mongo_client = pymongo.MongoClient("mongodb://localhost:27017/")
+db = mongo_client["veracious_db"]
+collection = db["fact_collection"]
+
+# Connecting to RabbitMQ
+rabbitmq_connection = pika.BlockingConnection(
+    pika.ConnectionParameters(host='localhost'))
+
+sender_channel = rabbitmq_connection.channel()
+sender_channel.queue_declare(queue='fact_validation_req_queue')
+
+
 
 #Defining Api end-points
 @app.get('/')
@@ -71,3 +90,36 @@ def get_fact_validation(fact: str):
     # ensembled_result = (pred_lstm + pred_pac + pred_nb + pred_bert)/4
 
     return {"trust_score": str(ensembled_result)}
+
+@app.get('/validate-fact-async', status_code=202)
+def registerFactValidationRequest(fact: str):
+    correlation_id = str(uuid.uuid4())
+    sender_channel.basic_publish(exchange='', routing_key='fact_validation_req_queue', body=fact, 
+                                 properties=pika.BasicProperties(correlation_id=correlation_id))
+    # collection.insert_one({"correlation_id": correlation_id, "status": "pending"})
+    return {"correlation_id": correlation_id}
+
+def get_fact_validation_result(correlation_id: str):
+    result = collection.find_one({"correlation_id": correlation_id})
+    if result is None:
+        return {"status": "error", "message": "Invalid correlation id"}
+    return result
+
+def on_request_message_received(ch, method, properties, body):
+    print(f"Received Request: {properties.correlation_id}")
+    fact = body.decode("utf-8")
+    response = get_fact_validation(fact)
+    print(response)
+
+    # #  Update status in MongoDB
+    # collection.update_one({"correlation_id": properties.correlation_id}, 
+    #                       {"$set": {"status": "completed", "result": response}})
+
+
+
+sender_channel.basic_consume(queue='fact_validation_req_queue', auto_ack=True,
+                             on_message_callback=on_request_message_received)
+
+thread1 = threading.Thread(target=sender_channel.start_consuming)
+thread1.start()
+thread1.join(0)
