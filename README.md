@@ -3,11 +3,12 @@ Backend repository for Veracious project
 
  ## 1) Installing dependencies
 ### 1.1) Installing python 3.8
-### 1.2) Installing Selenium webdriver for Chrome: https://chromedriver.chromium.org/downloads
+### 1.2) <a href="https://chromedriver.chromium.org/downloads">Installing Selenium webdriver for Chrome</a>
 ### 1.3) Set up the os environment variable for the webdriver such as:
 ```bash
     SET SELENIUM_WEB_DRIVER_CHROME_PATH=<PATH_TO_CHROME_DRIVER>
 ```
+### 1.4) <a href="https://www.rabbitmq.com/install-windows.html">Installing RabbitMQ locally</a>
 
 ## 2) Setting up project
 ### To create virtual environment
