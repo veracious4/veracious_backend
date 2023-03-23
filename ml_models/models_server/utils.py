@@ -4,7 +4,7 @@ from nltk.stem import WordNetLemmatizer
 from nltk.tokenize import word_tokenize
 from keras.models import load_model
 from tensorflow import keras
-from keras.preprocessing.sequence import pad_sequences
+from keras_preprocessing.sequence import pad_sequences
 import tensorflow as tf
 import re
 import pickle
