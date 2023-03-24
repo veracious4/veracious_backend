@@ -1,9 +1,6 @@
-from typing import Union
-
 from fastapi import FastAPI, Response, status
 from fastapi.middleware.cors import CORSMiddleware
 
-import numpy as np
 import pymongo
 import uuid
 import pika
@@ -28,7 +25,8 @@ app.add_middleware(
 
 
 # Connecting to MongoDB
-mongo_client = pymongo.MongoClient("mongodb://localhost:27017/")
+MONGO_URI  = "mongodb://localhost:27017/"
+mongo_client = pymongo.MongoClient(MONGO_URI)
 db = mongo_client["veracious_db"]
 collection = db["fact_collection"]
 
@@ -110,7 +108,7 @@ def register_fact_validation_request(fact: str):
     correlation_id = str(uuid.uuid4())
     sender_channel.basic_publish(exchange='', routing_key='fact_validation_req_queue', body=fact, 
                                  properties=pika.BasicProperties(correlation_id=correlation_id))
-    # collection.insert_one({"correlation_id": correlation_id, "status": "pending"})
+    collection.insert_one({"correlation_id": correlation_id, "status": "pending"})
     return {"correlation_id": correlation_id}
 
 
@@ -132,15 +130,17 @@ def get_fact_validation_status(correlation_id: str, response: Response):
         result : string
             The result of the request. This field will be present only if the status is completed.
     '''
+
     result = collection.find_one({"correlation_id": correlation_id})
+    
     if result is None:
         response.status_code = status.HTTP_404_NOT_FOUND
         return {"status": "error", "message": "Invalid correlation id"}
     elif result["status"] == "pending":
-        response.status_code = status.HTTP_102_PROCESSING
+        response.status_code = status.HTTP_202_ACCEPTED
         return {"status": "pending", "message": "Request is being processed"}
     else:
-        return {"status": "completed", "message":"Your result has been successfully processed", "result": result["result"]}
+        return {"status": "completed", "message":"Your result has been successfully processed", "trust_score": result["result"].get("trust_score")}
 
 
 
@@ -149,14 +149,12 @@ def on_request_message_received(ch, method, properties, body):
     A callback function that will be called when a message is received on the fact_validation_req_queue.
     This function will process the request and store the results in a MongoDB collection.
     '''
-    print(f"Received Request: {properties.correlation_id}")
     fact = body.decode("utf-8")
     response = get_fact_validation(fact)
-    print(response)
 
-    # #  Update status in MongoDB
-    # collection.update_one({"correlation_id": properties.correlation_id}, 
-    #                       {"$set": {"status": "completed", "result": response}})
+    #  Update status in MongoDB
+    collection.update_one({"correlation_id": properties.correlation_id}, 
+                          {"$set": {"status": "completed", "result": response}})
 
 
 sender_channel.basic_consume(queue='fact_validation_req_queue', auto_ack=True,
