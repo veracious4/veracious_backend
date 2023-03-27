@@ -7,6 +7,9 @@ from bs4 import BeautifulSoup
 import requests
 import re
 import os
+from nltk import tokenize
+import json
+from semantic_matcher import *
 
 
 class Scraper:
@@ -190,7 +193,30 @@ class Scraper:
         for article in article_list:
             article['text'] = self.__scrape_content_from_url(article['url'])
         return article_list
+    
+def run_generic_model(fact):
 
-# sc = Scraper()
-# result = sc.scrape("Agri Ministry Captures India's Initiative 'International Year of Millets' In Tableau")
-# print(result)
+    sc = Scraper()
+    scrape_res = sc.scrape(fact)
+
+    corpus = scrape_res[0]["text"]
+    corpus_facts = tokenize.sent_tokenize(corpus)
+    #print(corpus_facts)
+    sm = SemanticMatcher()
+
+    sm.encode_embeddings(corpus_facts)
+    query = ["Sun rises from east."]
+
+    (sim_sentence, sim_sentence_dis) = sm.generate_candidate(768, corpus, corpus_facts, query)
+    sim_score = sm.generate_simarity_score(query[0], sim_sentence)
+
+    print(sim_score)
+
+    return sim_score
+
+run_generic_model("Sun rises from east.")
+
+'''sc = Scraper()
+result = sc.scrape("Sun rises from east.")
+result = sc.scrape("Agri Ministry Captures India's Initiative 'International Year of Millets' In Tableau")
+print(len(result))'''

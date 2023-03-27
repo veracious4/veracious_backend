@@ -5,9 +5,8 @@ import pymongo
 import uuid
 import pika
 import threading
-
+from nltk import tokenize
 from utils import *
-
 
 API_DOC_TITLE = "Veracious API"
 app = FastAPI( title=API_DOC_TITLE, description="Backend API's of Veracious application")
@@ -47,7 +46,10 @@ def get_root():
 @app.get('/validate-fact', tags=["Fact Validation"])
 def get_fact_validation(fact: str):
     
-    # PAC Model
+    # Generic Model
+    pred_gen = run_generic_model(fact)
+
+    '''# PAC Model
     (model, vectorizer) = load_model_vectorizer("../passive_aggressive_model.pkl", "../passive_aggressive_vectorizer.pkl")
     
     pred_pac = fact_validator(fact, model, vectorizer)
@@ -81,15 +83,15 @@ def get_fact_validation(fact: str):
     else :
         pred_pac = 0.25
     
-    '''if(pred_svm==1.0):
+    if(pred_svm==1.0):
         pred_svm = 0.75
     else:
-        pred_svm = 0.25'''
+        pred_svm = 0.25
 
-    ensembled_result = (pred_lstm + pred_pac + pred_nb)/3
+    ensembled_result = (pred_lstm + pred_pac + pred_nb)/3'''
     # ensembled_result = (pred_lstm + pred_pac + pred_nb + pred_bert)/4
 
-    return {"trust_score": str(ensembled_result)}
+    return {"trust_score": str(pred_gen)}
 
 
 
@@ -155,6 +157,8 @@ def on_request_message_received(ch, method, properties, body):
     #  Update status in MongoDB
     collection.update_one({"correlation_id": properties.correlation_id}, 
                           {"$set": {"status": "completed", "result": response}})
+    
+
 
 
 sender_channel.basic_consume(queue='fact_validation_req_queue', auto_ack=True,
