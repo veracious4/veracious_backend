@@ -245,8 +245,7 @@ class Scraper:
             browser.get("https://www.google.com")
         
             #identify search box
-            search = browser.find_element(By.XPATH, "//input[@name='q']")
-            
+            search = browser.find_element(By.NAME, "q")
             #enter search text
             search.send_keys(query+" ?")
             time.sleep(0.2)
