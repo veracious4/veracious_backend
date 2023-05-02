@@ -408,3 +408,61 @@ def run_generic_model(fact):
     normalized_score = eff_score/100
 
     return normalized_score
+
+def validate_fact(fact:str):
+    pred_gen = run_generic_model(fact)
+    '''
+    # PAC Model
+    (model, vectorizer) = load_model_vectorizer("../passive_aggressive_model.pkl", "../passive_aggressive_vectorizer.pkl")
+    
+    pred_pac = fact_validator(fact, model, vectorizer)
+
+    # LSTM Model
+    (model, tokenizer) = load_model_tokenizer_lstm("../lstm_classifier.h5", "../lstm_tokenizer.pkl")
+
+    pred_lstm = fact_validator_lstm(fact, model, tokenizer, 300)
+
+    # SVM Model
+    #(svm_model, svm_vectorizer) = load_model_vectorizer_svm("../saved_models/svm_classifier.pkl", "../saved_models/vectorizer_SVM_NB.pickle")
+    #pred_svm = fact_validator_svm(fact, svm_model, svm_vectorizer)
+
+    # Naive Bayes Model
+    (nb_model, nb_vectorizer) = load_model_vectorizer_svm("../saved_models/bernoulli_nb_classifier.pkl", "../saved_models/vectorizer_SVM_NB.pickle")
+    pred_nb = fact_validator_nb(fact, nb_model, nb_vectorizer)
+
+    # # Bert Model
+    # bert_model = load_model_bert("../saved_models/bert/bert_classifier")
+    # pred_bert = fact_validator_bert(fact, bert_model)  
+
+    # Ensembling Result
+    pred_lstm = float(pred_lstm)
+    pred_pac = float(pred_pac[0])
+    #pred_svm = float(pred_svm)
+    pred_nb = float(pred_nb)
+    # pred_bert = float(pred_bert)
+
+    if(pred_pac == 1.0):
+        pred_pac = 0.75
+    else :
+        pred_pac = 0.25
+    
+    if(pred_svm==1.0):
+        pred_svm = 0.75
+    else:
+        pred_svm = 0.25
+
+    ensembled_result = (pred_lstm + pred_pac + pred_nb)/3
+    # ensembled_result = (pred_lstm + pred_pac + pred_nb + pred_bert)/4
+    '''
+    return pred_gen
+
+
+
+
+def get_verdict_from_trust_score(trust_score:float):
+    if trust_score <0.4:
+        return "REFUTES"
+    elif trust_score >0.6:
+        return "SUPPORTS"
+    else:
+        return "NOT ENOUGH INFO"

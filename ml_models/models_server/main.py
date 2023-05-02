@@ -45,11 +45,18 @@ def get_root():
 
 @app.get('/validate-fact', tags=["Fact Validation"])
 def get_fact_validation(fact: str):
+    '''
+        Validates a given fact. This function uses both the generic model and the ensemble ML model to validate the fact.
+        @param fact: Fact to be validated
+        @return: A JSON object containing the validation result
+    ''' 
+    score = validate_fact(fact)
     
-    # Generic Model
-    pred_gen = run_generic_model(fact)
+    '''
+    # # Generic Model
+    # pred_gen = run_generic_model(fact)
 
-    '''# PAC Model
+    # PAC Model
     (model, vectorizer) = load_model_vectorizer("../passive_aggressive_model.pkl", "../passive_aggressive_vectorizer.pkl")
     
     pred_pac = fact_validator(fact, model, vectorizer)
@@ -91,7 +98,7 @@ def get_fact_validation(fact: str):
     ensembled_result = (pred_lstm + pred_pac + pred_nb)/3'''
     # ensembled_result = (pred_lstm + pred_pac + pred_nb + pred_bert)/4
 
-    return {"trust_score": str(pred_gen)}
+    return {"trust_score": str(score)}
 
 
 
