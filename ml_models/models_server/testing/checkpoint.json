@@ -1,0 +1,7 @@
+{
+  "data_file_location": "../data/feverous/feverous_train_challenges.jsonl",
+  "random_state": 128,
+  "total_size": 100,
+  "last_executed": 100,
+  "current_accuracy": 0.4600000000000001
+}
