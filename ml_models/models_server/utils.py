@@ -402,7 +402,10 @@ def run_generic_model(fact):
                 print("{:.2f}".format(temp))
 
     print("Effective Trust Score: \n")
-    eff_score /= scores_cnt
+    if scores_cnt == 0:
+        eff_score = 50 # default score
+    else: 
+        eff_score /= scores_cnt
     print(eff_score)
 
     normalized_score = eff_score/100
